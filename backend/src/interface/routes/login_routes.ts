@@ -1,9 +1,13 @@
 import { type Router } from 'express'
 import { type LoginController } from '../controllers/login_controller'
+import { type Schema } from '../middlewares/validator'
+import { type Middleware } from '../middlewares'
+import { loginPostSchema } from '../schemas/login'
 
 export class LoginRoutes {
   constructor (
     private readonly router: Router,
+    private readonly bodyValidatorMiddleware: Middleware<Schema>,
     private readonly loginController: LoginController
   ) {}
 
@@ -24,6 +28,7 @@ export class LoginRoutes {
    */
     this.router.post(
       '/login',
+      this.bodyValidatorMiddleware.handler(loginPostSchema),
       this.loginController.post.bind(this.loginController)
     )
   }

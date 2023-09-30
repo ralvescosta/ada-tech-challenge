@@ -45,7 +45,7 @@ export default async (): Promise<Container> => {
 
   const loginService = new LoginServiceImpl(logger, sessionToken)
   const loginController = new LoginController(logger, loginService)
-  const loginRoutes = new LoginRoutes(router, loginController)
+  const loginRoutes = new LoginRoutes(router, bodyValidatorMiddleware, loginController)
 
   const cardsRepository = new CardsRepositoryImpl(logger)
   const cardsService = new CardsServiceImpl(logger, cardsRepository)
