@@ -51,12 +51,12 @@ export class CardsController {
     const { id } = req.params
 
     try {
-      const cards = await this.cardsService.deleteCard(Number(id))
+      const response = await this.cardsService.deleteCard(Number(id))
 
-      req.body = cards.find(card => card.id === Number(id))
+      req.body = response.deleted
 
       res.status(200).json(
-        cards.map(card => ({ id: card.id, titulo: card.title, conteudo: card.content, lista: card.list }))
+        response.cards.map(card => ({ id: card.id, titulo: card.title, conteudo: card.content, lista: card.list }))
       )
     } catch (err: any) {
       errorHandler(err, res)

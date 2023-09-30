@@ -5,11 +5,16 @@ import { NotFoundError } from './errors/not_found'
 import { type CardsRepository } from './interfaces/cards_repository'
 import { type Card } from './models/cards'
 
+export interface DeleteResponse {
+  deleted: Card
+  cards: Card[]
+}
+
 export interface CardsService {
   listAllCards: () => Promise<Card[]>
   createCard: (card: Omit<Card, 'id'>) => Promise<Card>
   updateCard: (paramId: number, card: Card) => Promise<Card>
-  deleteCard: (id: number) => Promise<Card[]>
+  deleteCard: (id: number) => Promise<DeleteResponse>
 }
 
 export class CardsServiceImpl implements CardsService {
@@ -46,7 +51,7 @@ export class CardsServiceImpl implements CardsService {
     return await this.cardsRepository.update(card)
   }
 
-  public async deleteCard (id: number): Promise<Card[]> {
+  public async deleteCard (id: number): Promise<DeleteResponse> {
     const card = await this.cardsRepository.getById(id)
     if (card == null) {
       this.logger.error({ msg: 'the card id provided do not exist', id })
@@ -55,6 +60,8 @@ export class CardsServiceImpl implements CardsService {
 
     await this.cardsRepository.delete(id)
 
-    return await this.cardsRepository.list()
+    const cards = await this.cardsRepository.list()
+
+    return { deleted: card, cards }
   }
 }
