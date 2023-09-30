@@ -14,7 +14,7 @@
   "scripts": {
     "build": "rimraf ./build && tsc",
     "start": "NODE_ENV=local DEBUG_MODE=true yarn nodemon src/main.ts",
-    "test": "NODE_ENV=local jest --passWithNoTests --noStackTrace --runInBand --detectOpenHandles",
+    "test": "NODE_ENV=local jest --noStackTrace --runInBand --detectOpenHandles",
     "test:watch": "NODE_ENV=local jest --watchAll --noStackTrace --runInBand",
     "test:cov": "NODE_ENV=local jest --coverage --detectOpenHandles"
   },
