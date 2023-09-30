@@ -10,33 +10,35 @@ export class CardsController {
   public async get (req: Request, res: Response): Promise<void> {
     try {
       const cards = await this.cardsService.listAllCards()
-      res.status(200).json(cards)
+      res.status(200).json(
+        cards.map(card => ({ id: card.id, titulo: card.title, conteudo: card.content, lista: card.list }))
+      )
     } catch (err: any) {
       errorHandler(err, res)
     }
   }
 
   public async post (req: Request, res: Response): Promise<void> {
-    const { title, content, list } = req.body
+    const { titulo, conteudo, lista } = req.body
 
     try {
-      const card = await this.cardsService.createCard({ title, content, list })
-      res.status(201).json(card)
+      const card = await this.cardsService.createCard({ title: titulo, content: conteudo, list: lista })
+      res.status(201).json({ id: card.id, titulo: card.title, conteudo: card.content, lista: card.list })
     } catch (err: any) {
       errorHandler(err, res)
     }
   }
 
   public async update (req: Request, res: Response, next: NextFunction): Promise<void> {
-    const { title, content, list } = req.body
-    const { id } = req.params
+    const { id, titulo, conteudo, lista } = req.body as { id: number, titulo: string, conteudo: string, lista: string }
+    const { id: paramId } = req.params
 
     try {
-      const card = await this.cardsService.updateCard({ id: Number(id), title, content, list })
+      const card = await this.cardsService.updateCard(Number(paramId), { id, title: titulo, content: conteudo, list: lista })
 
       req.body = { ...req.body, id }
 
-      res.status(200).json(card)
+      res.status(200).json({ id, titulo: card.title, conteudo: card.content, lista: card.list })
     } catch (err: any) {
       errorHandler(err, res)
       return
@@ -49,11 +51,13 @@ export class CardsController {
     const { id } = req.params
 
     try {
-      const card = await this.cardsService.deleteCard(Number(id))
+      const cards = await this.cardsService.deleteCard(Number(id))
 
-      req.body = card
+      req.body = cards.find(card => card.id === Number(id))
 
-      res.status(200).json()
+      res.status(200).json(
+        cards.map(card => ({ id: card.id, titulo: card.title, conteudo: card.content, lista: card.list }))
+      )
     } catch (err: any) {
       errorHandler(err, res)
       return

@@ -16,12 +16,11 @@ export class SessionTokenImpl implements SessionToken {
 
   public validate (token: string): Login {
     try {
-      const verified = jwt.verify(token, this.JWT_SECRET)
+      const { login, password } = jwt.verify(token, this.JWT_SECRET) as jwt.JwtPayload
+      return { login, password }
     } catch (err: any) {
       this.logger.error({ msg: 'invalid token', error: err })
       throw new UnauthorizedError(err?.message)
     }
-
-    return {} as any
   }
 }

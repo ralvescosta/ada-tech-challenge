@@ -2,11 +2,11 @@ import pino, { type Logger } from 'pino'
 export type { Logger } from 'pino'
 
 export default (): Logger => {
-  const enabled = process.env.LOGGER === 'true'
+  const enabled = process?.env?.LOGGER === 'true'
   const level: string = ((process?.env?.LOG_LEVEL) != null) ? process.env.LOG_LEVEL : 'debug'
-  const nodeEnv: string = ((process?.env?.NODE_ENV) != null) ? process.env.NODE_ENV : 'local'
+  const debugMode = process?.env?.DEBUG_MODE === 'true'
 
-  if (nodeEnv === 'local') {
+  if (debugMode) {
     return pino({
       enabled,
       level,

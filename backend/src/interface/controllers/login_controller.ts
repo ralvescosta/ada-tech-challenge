@@ -10,10 +10,10 @@ export class LoginController {
   ) { }
 
   public async post (request: Request, response: Response): Promise<void> {
-    const { login, password } = request.body
+    const { login, senha } = request.body
 
     try {
-      const token = await this.loginService.perform({ login, password })
+      const token = await this.loginService.perform({ login, password: senha })
       response.status(200).json({ token })
     } catch (err: any) {
       errorHandler(err, response)

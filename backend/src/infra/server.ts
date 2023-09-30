@@ -22,7 +22,7 @@ export default class HttpServer {
   }
 
   public listening (): void {
-    const PORT = ((process?.env?.PORT) != null) ? process.env.PORT : 4000
+    const PORT = ((process?.env?.PORT) != null) ? process.env.PORT : 5000
     this.swagger()
     this.express.listen(PORT, () => { this.logger.info(`Server running and listening at: 127.0.0.1:${PORT}`) })
   }
@@ -43,7 +43,7 @@ export default class HttpServer {
         },
         servers: [
           {
-            url: 'http://localhost:4000',
+            url: 'http://localhost:5000',
             description: 'local'
           }
         ],

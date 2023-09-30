@@ -9,13 +9,14 @@
     "url": "https://www.linkedin.com/in/ralvescosta/"
   },
   "engines": {
-    "node": "18.x.x"
+    "node": ">=16.x.x"
   },
   "scripts": {
-    "start": "NODE_ENV=local yarn nodemon src/main.ts",
-    "test": "NODE_ENV=development jest --passWithNoTests --noStackTrace --runInBand --detectOpenHandles",
-    "test:watch": "NODE_ENV=development jest --watchAll --noStackTrace --runInBand",
-    "test:cov": "NODE_ENV=development jest --coverage --detectOpenHandles"
+    "build": "rimraf ./build && tsc",
+    "start": "NODE_ENV=local DEBUG_MODE=true yarn nodemon src/main.ts",
+    "test": "NODE_ENV=local jest --passWithNoTests --noStackTrace --runInBand --detectOpenHandles",
+    "test:watch": "NODE_ENV=local jest --watchAll --noStackTrace --runInBand",
+    "test:cov": "NODE_ENV=local jest --coverage --detectOpenHandles"
   },
   "dependencies": {
     "@types/sequelize": "^4.28.16",
