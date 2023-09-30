@@ -1,5 +1,5 @@
 import { type Card } from '../../services/models/cards'
-import { type CardsRepository } from '../../services/cards_repository'
+import { type CardsRepository } from '../../services/interfaces/cards_repository'
 import { type Logger } from '../logger'
 import { CardsModel } from '../database/models/cards'
 

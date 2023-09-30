@@ -7,13 +7,14 @@ import { AuthMiddleware } from './interface/middlewares/auth_middleware'
 import { BodyValidatorMiddleware, type Schema } from './interface/middlewares/validator'
 import { CardsController } from './interface/controllers/cards_controller'
 import { CardsRepositoryImpl } from './infra/repositories/cards_repository'
-import { type CardsRepository } from './services/cards_repository'
+import { type CardsRepository } from './services/interfaces/cards_repository'
 import { CardsRoutes } from './interface/routes/cards_routes'
 import { type CardsService, CardsServiceImpl } from './services/cards_service'
 import { type LoginService, LoginServiceImpl } from './services/login_service'
 import { LoginController } from './interface/controllers/login_controller'
 import { LoginRoutes } from './interface/routes/login_routes'
 import { LoggerMiddleware } from './interface/middlewares/logger_middleware'
+import { SessionTokenImpl } from './infra/token'
 
 export interface Container {
   logger: Logger
@@ -37,11 +38,12 @@ export default async (): Promise<Container> => {
   const router = Router()
   const httpServer = new HttpServer(logger)
 
-  const authMiddleware = new AuthMiddleware(logger)
+  const sessionToken = new SessionTokenImpl(logger)
+  const authMiddleware = new AuthMiddleware(logger, sessionToken)
   const bodyValidatorMiddleware = new BodyValidatorMiddleware(logger)
   const loggerMiddleware = new LoggerMiddleware(logger)
 
-  const loginService = new LoginServiceImpl(logger)
+  const loginService = new LoginServiceImpl(logger, sessionToken)
   const loginController = new LoginController(logger, loginService)
   const loginRoutes = new LoginRoutes(router, loginController)
 

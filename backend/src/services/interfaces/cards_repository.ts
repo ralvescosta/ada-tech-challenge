@@ -1,4 +1,4 @@
-import { type Card } from './models/cards'
+import { type Card } from '../models/cards'
 
 export interface CardsRepository {
   getById: (id: number) => Promise<Card | null>

@@ -22,7 +22,7 @@ export class LoginRoutes {
    *       200:
    *         description: Returns login token.
    */
-    this.router.get(
+    this.router.post(
       '/login',
       this.loginController.post.bind(this.loginController)
     )

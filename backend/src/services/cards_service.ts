@@ -1,5 +1,5 @@
 import { type Logger } from '../infra/logger'
-import { type CardsRepository } from './cards_repository'
+import { type CardsRepository } from './interfaces/cards_repository'
 
 export interface CardsService {
   perform: () => Promise<void>
