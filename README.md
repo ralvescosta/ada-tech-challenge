@@ -1,5 +1,6 @@
 # Ada Tech Challenge
 
+[![pipeline](https://github.com/ralvescosta/ada-tech-challenge/actions/workflows/gha.yml/badge.svg)](https://github.com/ralvescosta/ada-tech-challenge/actions/workflows/gha.yml)
 [![Quality Gate Status](https://sonarcloud.io/api/project_badges/measure?project=ralvescosta_ada-tech-challenge&metric=alert_status)](https://sonarcloud.io/summary/new_code?id=ralvescosta_ada-tech-challenge)
 [![Coverage](https://sonarcloud.io/api/project_badges/measure?project=ralvescosta_ada-tech-challenge&metric=coverage)](https://sonarcloud.io/summary/new_code?id=ralvescosta_ada-tech-challenge)
 [![Duplicated Lines (%)](https://sonarcloud.io/api/project_badges/measure?project=ralvescosta_ada-tech-challenge&metric=duplicated_lines_density)](https://sonarcloud.io/summary/new_code?id=ralvescosta_ada-tech-challenge)
@@ -12,9 +13,9 @@
 Trilha de backend
 
 - [Executando o projeto]()
-- [Descricao do projeto]()
+- [Descrição do projeto]()
   - [Frontend]()
   - [Backend]()
     - [Estrutura do projeto]()
     - [OpenAPI]()
-  - [GithubAction]
+  - [Github Action]()
