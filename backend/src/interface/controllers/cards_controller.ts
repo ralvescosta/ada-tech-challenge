@@ -1,9 +1,11 @@
 import { type Request, type Response } from 'express'
 import { type Logger } from '../../infra/logger'
+import { type CardsService } from '../../services/cards_service'
 
 export class CardsController {
   constructor (
-    private readonly logger: Logger
+    private readonly logger: Logger,
+    private readonly cardsService: CardsService
   ) {}
 
   public async listAllCards (req: Request, res: Response): Promise<void> {

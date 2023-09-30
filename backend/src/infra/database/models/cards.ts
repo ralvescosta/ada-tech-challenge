@@ -1,10 +1,10 @@
 import Sequelize, { Model, type Optional } from 'sequelize'
-import { type Cards } from '../../../models/cards'
+import { type Card } from '../../../services/models/cards'
 import dbConnection from '../connection'
 
-type CardCreationAttributes = Optional<Cards, 'id' | 'title'>
+type CardCreationAttributes = Optional<Card, 'id' | 'title'>
 
-export class CardsModel extends Model<Cards, CardCreationAttributes> {
+export class CardsModel extends Model<Card, CardCreationAttributes> {
   public readonly id!: number
   public title!: string
   public content!: string

@@ -9,6 +9,10 @@ import { CardsController } from './interface/controllers/cards_controller'
 import { CardsRepositoryImpl } from './infra/repositories/cards_repository'
 import { type CardsRepository } from './services/cards_repository'
 import CardsRouter from './interface/routes/cards_routes'
+import { type CardsService, CardsServiceImpl } from './services/cards_service'
+import { type LoginService, LoginServiceImpl } from './services/login_service'
+import { LoginController } from './interface/controllers/login_controller'
+import LoginRouter from './interface/routes/login_routes'
 
 export interface Container {
   logger: Logger
@@ -16,7 +20,10 @@ export interface Container {
   httpServer: HttpServer
   authMiddleware: Middleware<never>
   bodyValidatorMiddleware: Middleware<Schema>
+  loginService: LoginService
+  loginController: LoginController
   cardsRepository: CardsRepository
+  cardsService: CardsService
   cardsController: CardsController
 }
 
@@ -30,8 +37,13 @@ export default async (): Promise<Container> => {
   const authMiddleware = new AuthMiddleware(logger)
   const bodyValidatorMiddleware = new BodyValidatorMiddleware(logger)
 
+  const loginService = new LoginServiceImpl(logger)
+  const loginController = new LoginController(logger, loginService)
+  LoginRouter({ router, loginController })
+
   const cardsRepository = new CardsRepositoryImpl(logger)
-  const cardsController = new CardsController(logger)
+  const cardsService = new CardsServiceImpl(logger, cardsRepository)
+  const cardsController = new CardsController(logger, cardsService)
   CardsRouter({ router, authMiddleware, bodyValidatorMiddleware, cardsController })
 
   return {
@@ -40,7 +52,10 @@ export default async (): Promise<Container> => {
     httpServer,
     authMiddleware,
     bodyValidatorMiddleware,
+    loginService,
+    loginController,
     cardsRepository,
+    cardsService,
     cardsController
   }
 }
