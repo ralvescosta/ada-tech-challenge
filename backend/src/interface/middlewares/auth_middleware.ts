@@ -31,10 +31,7 @@ export class AuthMiddleware implements Middleware<never> {
       }
 
       try {
-        const login = this.sessionToken.validate(token[1])
-
-        // @TODO
-        // req.login = undefined
+        this.sessionToken.validate(token[1])
       } catch (err: any) {
         res.status(401).json({ statusCode: 401, message: err.message })
         res.end()
