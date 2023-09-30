@@ -13,6 +13,7 @@ import { type CardsService, CardsServiceImpl } from './services/cards_service'
 import { type LoginService, LoginServiceImpl } from './services/login_service'
 import { LoginController } from './interface/controllers/login_controller'
 import { LoginRoutes } from './interface/routes/login_routes'
+import { LoggerMiddleware } from './interface/middlewares/logger_middleware'
 
 export interface Container {
   logger: Logger
@@ -38,6 +39,7 @@ export default async (): Promise<Container> => {
 
   const authMiddleware = new AuthMiddleware(logger)
   const bodyValidatorMiddleware = new BodyValidatorMiddleware(logger)
+  const loggerMiddleware = new LoggerMiddleware(logger)
 
   const loginService = new LoginServiceImpl(logger)
   const loginController = new LoginController(logger, loginService)
@@ -46,7 +48,7 @@ export default async (): Promise<Container> => {
   const cardsRepository = new CardsRepositoryImpl(logger)
   const cardsService = new CardsServiceImpl(logger, cardsRepository)
   const cardsController = new CardsController(logger, cardsService)
-  const cardsRoutes = new CardsRoutes(router, authMiddleware, bodyValidatorMiddleware, cardsController)
+  const cardsRoutes = new CardsRoutes(router, authMiddleware, bodyValidatorMiddleware, loggerMiddleware, cardsController)
 
   return {
     logger,

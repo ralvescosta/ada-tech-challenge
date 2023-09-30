@@ -8,6 +8,7 @@ export class CardsRoutes {
     private readonly router: Router,
     private readonly authMiddleware: Middleware<never>,
     private readonly bodyValidatorMiddleware: Middleware<Schema>,
+    private readonly loggerMiddleware: Middleware<string>,
     private readonly cardsController: CardsController
   ) {}
 
@@ -75,7 +76,8 @@ export class CardsRoutes {
     this.router.put('/cards/:id',
       this.authMiddleware.handler(),
       this.bodyValidatorMiddleware.handler({ a: 1 }),
-      this.cardsController.updateCard.bind(this.cardsController)
+      this.cardsController.updateCard.bind(this.cardsController),
+      this.loggerMiddleware.handler('Alterado')
     )
 
     /**
@@ -94,7 +96,8 @@ export class CardsRoutes {
    */
     this.router.delete('/cards/:id',
       this.authMiddleware.handler(),
-      this.cardsController.deleteCard.bind(this.cardsController)
+      this.cardsController.deleteCard.bind(this.cardsController),
+      this.loggerMiddleware.handler('Removido')
     )
   }
 }

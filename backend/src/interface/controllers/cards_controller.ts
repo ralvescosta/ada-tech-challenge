@@ -1,4 +1,4 @@
-import { type Request, type Response } from 'express'
+import { type NextFunction, type Request, type Response } from 'express'
 import { type Logger } from '../../infra/logger'
 import { type CardsService } from '../../services/cards_service'
 
@@ -18,13 +18,18 @@ export class CardsController {
     res.json()
   }
 
-  public async updateCard (req: Request, res: Response): Promise<void> {
+  public async updateCard (req: Request, res: Response, next: NextFunction): Promise<void> {
     this.logger.debug('updateCard')
-    res.json()
+
+    res.json({ hello: 'world' })
+
+    next()
   }
 
-  public async deleteCard (req: Request, res: Response): Promise<void> {
+  public async deleteCard (req: Request, res: Response, next: NextFunction): Promise<void> {
     this.logger.debug('deleteCard')
-    res.json()
+    // res.json()
+
+    next()
   }
 }
