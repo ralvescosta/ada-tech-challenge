@@ -2,11 +2,11 @@ module.exports = {
   // verbose: true,
   roots: ['<rootDir>'],
   collectCoverageFrom: [
-    '<rootDir>/src/**/*.mjs',
+    '<rootDir>/src/**/*.ts',
     '!**/node_modules/**',
-    '!<rootDir>/src/tools/**',
-    '!<rootDir>/src/container.mjs',
-    '!<rootDir>/src/main.mjs'
+    '!<rootDir>/src/infra/**',
+    '!<rootDir>/src/container.ts',
+    '!<rootDir>/src/main.ts'
   ],
   coverageThreshold: {
     global: {

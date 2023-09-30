@@ -42,7 +42,7 @@ export class CardsServiceImpl implements CardsService {
       throw new BadRequestError('param id and body id must be the same')
     }
 
-    const created = this.cardsRepository.getById(card.id)
+    const created = await this.cardsRepository.getById(card.id)
     if (created == null) {
       this.logger.error({ msg: 'the card id provided do not exist', card })
       throw new NotFoundError('the card id provided do not exist')
