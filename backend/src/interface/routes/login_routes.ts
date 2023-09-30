@@ -1,11 +1,14 @@
 import { type Router } from 'express'
 import { type LoginController } from '../controllers/login_controller'
 
-export default (
-  { router, loginController }:
-  { router: Router, loginController: LoginController }
-): void => {
-  /**
+export class LoginRoutes {
+  constructor (
+    private readonly router: Router,
+    private readonly loginController: LoginController
+  ) {}
+
+  public install (): void {
+    /**
    * @openapi
    * /login:
    *   get:
@@ -19,8 +22,9 @@ export default (
    *       200:
    *         description: Returns login token.
    */
-  router.get(
-    '/login',
-    loginController.post.bind(loginController)
-  )
+    this.router.get(
+      '/login',
+      this.loginController.post.bind(this.loginController)
+    )
+  }
 }

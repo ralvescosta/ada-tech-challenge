@@ -1,7 +1,10 @@
 import Container from './container'
 
 void (async (): Promise<void> => {
-  const { httpServer, router } = await Container()
+  const { httpServer, cardsRoutes, loginRoutes, router } = await Container()
+
+  loginRoutes.install()
+  cardsRoutes.install()
 
   httpServer.route(router)
 

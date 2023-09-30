@@ -8,11 +8,11 @@ import { BodyValidatorMiddleware, type Schema } from './interface/middlewares/va
 import { CardsController } from './interface/controllers/cards_controller'
 import { CardsRepositoryImpl } from './infra/repositories/cards_repository'
 import { type CardsRepository } from './services/cards_repository'
-import CardsRouter from './interface/routes/cards_routes'
+import { CardsRoutes } from './interface/routes/cards_routes'
 import { type CardsService, CardsServiceImpl } from './services/cards_service'
 import { type LoginService, LoginServiceImpl } from './services/login_service'
 import { LoginController } from './interface/controllers/login_controller'
-import LoginRouter from './interface/routes/login_routes'
+import { LoginRoutes } from './interface/routes/login_routes'
 
 export interface Container {
   logger: Logger
@@ -22,9 +22,11 @@ export interface Container {
   bodyValidatorMiddleware: Middleware<Schema>
   loginService: LoginService
   loginController: LoginController
+  loginRoutes: LoginRoutes
   cardsRepository: CardsRepository
   cardsService: CardsService
   cardsController: CardsController
+  cardsRoutes: CardsRoutes
 }
 
 export default async (): Promise<Container> => {
@@ -39,12 +41,12 @@ export default async (): Promise<Container> => {
 
   const loginService = new LoginServiceImpl(logger)
   const loginController = new LoginController(logger, loginService)
-  LoginRouter({ router, loginController })
+  const loginRoutes = new LoginRoutes(router, loginController)
 
   const cardsRepository = new CardsRepositoryImpl(logger)
   const cardsService = new CardsServiceImpl(logger, cardsRepository)
   const cardsController = new CardsController(logger, cardsService)
-  CardsRouter({ router, authMiddleware, bodyValidatorMiddleware, cardsController })
+  const cardsRoutes = new CardsRoutes(router, authMiddleware, bodyValidatorMiddleware, cardsController)
 
   return {
     logger,
@@ -54,8 +56,10 @@ export default async (): Promise<Container> => {
     bodyValidatorMiddleware,
     loginService,
     loginController,
+    loginRoutes,
     cardsRepository,
     cardsService,
-    cardsController
+    cardsController,
+    cardsRoutes
   }
 }

@@ -3,11 +3,16 @@ import { type Middleware } from '../middlewares'
 import { type CardsController } from '../controllers/cards_controller'
 import { type Schema } from '../middlewares/validator'
 
-export default (
-  { router, authMiddleware, bodyValidatorMiddleware, cardsController }:
-  { router: Router, authMiddleware: Middleware<never>, bodyValidatorMiddleware: Middleware<Schema>, cardsController: CardsController }
-): void => {
-  /**
+export class CardsRoutes {
+  constructor (
+    private readonly router: Router,
+    private readonly authMiddleware: Middleware<never>,
+    private readonly bodyValidatorMiddleware: Middleware<Schema>,
+    private readonly cardsController: CardsController
+  ) {}
+
+  public install (): void {
+    /**
    * @openapi
    * /cards:
    *   get:
@@ -21,13 +26,13 @@ export default (
    *       200:
    *         description: Returns the cards list.
    */
-  router.get(
-    '/cards',
-    authMiddleware.handler(),
-    cardsController.listAllCards.bind(cardsController)
-  )
+    this.router.get(
+      '/cards',
+      this.authMiddleware.handler(),
+      this.cardsController.listAllCards.bind(this.cardsController)
+    )
 
-  /**
+    /**
    * @openapi
    * /cards:
    *   post:
@@ -41,13 +46,13 @@ export default (
    *       200:
    *         description: Returns the cards created.
    */
-  router.post('/cards',
-    authMiddleware.handler(),
-    bodyValidatorMiddleware.handler({ a: 1 }),
-    cardsController.createCard.bind(cardsController)
-  )
+    this.router.post('/cards',
+      this.authMiddleware.handler(),
+      this.bodyValidatorMiddleware.handler({ a: 1 }),
+      this.cardsController.createCard.bind(this.cardsController)
+    )
 
-  /**
+    /**
    * @openapi
    * /cards/{id}:
    *   put:
@@ -67,13 +72,13 @@ export default (
    *       200:
    *         description: Returns the cards updated.
    */
-  router.put('/cards/:id',
-    authMiddleware.handler(),
-    bodyValidatorMiddleware.handler({ a: 1 }),
-    cardsController.updateCard.bind(cardsController)
-  )
+    this.router.put('/cards/:id',
+      this.authMiddleware.handler(),
+      this.bodyValidatorMiddleware.handler({ a: 1 }),
+      this.cardsController.updateCard.bind(this.cardsController)
+    )
 
-  /**
+    /**
    * @openapi
    * /cards/{id}:
    *   delete:
@@ -87,8 +92,9 @@ export default (
    *       200:
    *         description: Empty.
    */
-  router.delete('/cards/:id',
-    authMiddleware.handler(),
-    cardsController.deleteCard.bind(cardsController)
-  )
+    this.router.delete('/cards/:id',
+      this.authMiddleware.handler(),
+      this.cardsController.deleteCard.bind(this.cardsController)
+    )
+  }
 }
