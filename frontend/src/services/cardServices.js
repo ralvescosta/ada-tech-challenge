@@ -20,7 +20,7 @@ const useCardService = () => {
             headers: DEFAULT_HEADERS,
         })
             .then(toJson)
-            .then(token => `Bearer ${token}`)
+            .then(({ token }) => `Bearer ${token}`)
             .then(token => ({ Authorization: token }))
             .catch(console.error);
     };
