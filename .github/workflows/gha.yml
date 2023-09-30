@@ -30,24 +30,29 @@ jobs:
     - name: 🔎 Run tests
       run: cd backend && yarn test:cov
 
+    - name: SonarCloud Scan
+      uses: SonarSource/sonarcloud-github-action@master
+      env:
+        GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        SONAR_TOKEN: ${{ secrets.SONAR_TOKEN }}
+      with:
+          projectBaseDir: ./backend/
+
   build:
     needs: [ci]
     if: ${{ github.ref == 'refs/heads/develop' || github.ref == 'refs/heads/main' }}
     runs-on: ubuntu-latest
+    strategy:
+      matrix:
+        service: [backend, frontend]
 
     steps:
     - name: 📁 Checkout repository
       uses: actions/checkout@v2
       with:
         submodules: 'true'
-        token: ${{ secrets.PAT_TOKEN }}
         repo-token: ${{ secrets.GITHUB_TOKEN }}
 
     - name: 🐳 Build container
-      env:
-        ECR_REGISTRY: ${{ steps.login-ecr.outputs.registry }}
-        ECR_REPOSITORY: legacy-api
-        IMAGE_TAG: ${{ needs.ci.outputs.tag }}
       run: |
-        docker build . -t $ECR_REGISTRY/$ECR_REPOSITORY:$IMAGE_TAG
-        docker push $ECR_REGISTRY/$ECR_REPOSITORY:$IMAGE_TAG
+        cd ${{ matrix.service }} && docker build . -t ralvescosta-${{ matrix.service }}:latest
