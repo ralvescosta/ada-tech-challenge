@@ -27,6 +27,29 @@ export class CardsRoutes {
    *     responses:
    *       200:
    *         description: Returns the cards list.
+   *         content:
+   *           application/json:
+   *             schema:
+   *               type: array
+   *               items:
+   *                 allOf:
+   *                 - $ref: '#/components/schemas/Card'
+   *                 - type: object
+   *                   properties:
+   *                     id:
+   *                       type: number
+   *       401:
+   *         description: Not Authorized - Without JWT token or token was expired
+   *         content:
+   *           application/json:
+   *             schema:
+   *               $ref: '#/components/schemas/Error'
+   *       500:
+   *         description: Internal Error
+   *         content:
+   *           application/json:
+   *             schema:
+   *               $ref: '#/components/schemas/Error'
    */
     this.router.get(
       '/cards',
@@ -44,9 +67,48 @@ export class CardsRoutes {
    *     security:
    *       - bearerAuth: []
    *     description: Create card
+   *     requestBody:
+   *       description: Card payload
+   *       content:
+   *         application/json:
+   *           schema:
+   *             $ref: '#/components/schemas/Card'
    *     responses:
    *       200:
-   *         description: Returns the cards created.
+   *         description: Returns the cards list.
+   *         content:
+   *           application/json:
+   *             schema:
+   *               allOf:
+   *               - $ref: '#/components/schemas/Card'
+   *               type: object
+   *               properties:
+   *                 id:
+   *                   type: number
+   *       400:
+   *         description: Bad Request - Unformatted Body
+   *         content:
+   *           application/json:
+   *             schema:
+   *               $ref: '#/components/schemas/Error'
+   *       401:
+   *         description: Not Authorized - Without JWT token or token was expired
+   *         content:
+   *           application/json:
+   *             schema:
+   *               $ref: '#/components/schemas/Error'
+   *       409:
+   *         description: Conflict - When there is already a card with the same title
+   *         content:
+   *           application/json:
+   *             schema:
+   *               $ref: '#/components/schemas/Error'
+   *       500:
+   *         description: Internal Error
+   *         content:
+   *           application/json:
+   *             schema:
+   *               $ref: '#/components/schemas/Error'
    */
     this.router.post('/cards',
       this.authMiddleware.handler(),
@@ -59,6 +121,7 @@ export class CardsRoutes {
    * /cards/{id}:
    *   put:
    *     summary: Update a card
+   *     description: Update a card
    *     tags:
    *       - cards
    *     security:
@@ -69,10 +132,47 @@ export class CardsRoutes {
    *         schema:
    *           type: integer
    *         required: true
-   *     description: Update a card
+   *     requestBody:
+   *       description: Card payload
+   *       content:
+   *         application/json:
+   *           schema:
+   *             allOf:
+   *             - $ref: '#/components/schemas/Card'
+   *             type: object
+   *             properties:
+   *               id:
+   *                 type: number
    *     responses:
    *       200:
-   *         description: Returns the cards updated.
+   *         description: Returns the cards list.
+   *         content:
+   *           application/json:
+   *             schema:
+   *               allOf:
+   *               - $ref: '#/components/schemas/Card'
+   *               type: object
+   *               properties:
+   *                 id:
+   *                   type: number
+   *       400:
+   *         description: Bad Request - Unformatted Body or ID's provided do not match
+   *         content:
+   *           application/json:
+   *             schema:
+   *               $ref: '#/components/schemas/Error'
+   *       401:
+   *         description: Not Authorized - Without JWT token or token was expired
+   *         content:
+   *           application/json:
+   *             schema:
+   *               $ref: '#/components/schemas/Error'
+   *       500:
+   *         description: Internal Error
+   *         content:
+   *           application/json:
+   *             schema:
+   *               $ref: '#/components/schemas/Error'
    */
     this.router.put('/cards/:id',
       this.authMiddleware.handler(),
@@ -90,10 +190,45 @@ export class CardsRoutes {
    *       - cards
    *     security:
    *       - bearerAuth: []
+   *     parameters:
+   *       - in: path
+   *         name: id
+   *         schema:
+   *           type: integer
+   *         required: true
    *     description: Delete a card
    *     responses:
    *       200:
-   *         description: Empty.
+   *         description: Returns the cards list.
+   *         content:
+   *           application/json:
+   *             schema:
+   *               type: array
+   *               items:
+   *                 allOf:
+   *                 - $ref: '#/components/schemas/Card'
+   *                 - type: object
+   *                   properties:
+   *                     id:
+   *                       type: number
+   *       400:
+   *         description: Bad Request - Unformatted Body
+   *         content:
+   *           application/json:
+   *             schema:
+   *               $ref: '#/components/schemas/Error'
+   *       401:
+   *         description: Not Authorized - Without JWT token or token was expired
+   *         content:
+   *           application/json:
+   *             schema:
+   *               $ref: '#/components/schemas/Error'
+   *       500:
+   *         description: Internal Error
+   *         content:
+   *           application/json:
+   *             schema:
+   *               $ref: '#/components/schemas/Error'
    */
     this.router.delete('/cards/:id',
       this.authMiddleware.handler(),

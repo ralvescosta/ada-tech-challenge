@@ -15,16 +15,50 @@ export class LoginRoutes {
     /**
    * @openapi
    * /login:
-   *   get:
+   *   post:
    *     summary: Login
+   *     description: Login
    *     tags:
    *       - login
-   *     security:
-   *       - bearerAuth: []
-   *     description: Login
+   *     requestBody:
+   *       description: Login
+   *       content:
+   *         application/json:
+   *           schema:
+   *             type: object
+   *             properties:
+   *               login:
+   *                 type: string
+   *               senha:
+   *                 type: string
    *     responses:
    *       200:
-   *         description: Returns login token.
+   *         description: Returns the token.
+   *         content:
+   *           application/json:
+   *             schema:
+   *               type: object
+   *               properties:
+   *                 token:
+   *                   type: string
+   *       400:
+   *         description: Bad Request - Unformatted Body
+   *         content:
+   *           application/json:
+   *             schema:
+   *               $ref: '#/components/schemas/Error'
+   *       401:
+   *         description: Not Authorized - Wrong login or password
+   *         content:
+   *           application/json:
+   *             schema:
+   *               $ref: '#/components/schemas/Error'
+   *       500:
+   *         description: Internal Error
+   *         content:
+   *           application/json:
+   *             schema:
+   *               $ref: '#/components/schemas/Error'
    */
     this.router.post(
       '/login',

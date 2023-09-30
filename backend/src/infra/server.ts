@@ -8,6 +8,7 @@ import { type Logger } from '../infra/logger'
 
 export default class HttpServer {
   private readonly express: Application
+  private readonly APP_PORT: number
 
   constructor (private readonly logger: Logger) {
     this.express = express()
@@ -15,6 +16,7 @@ export default class HttpServer {
     this.express.use(cors())
     this.express.use(compression())
     this.express.use(helmet())
+    this.APP_PORT = ((process?.env?.PORT) != null) ? Number(process.env.PORT) : 5000
   }
 
   public route (route: Router): void {
@@ -22,9 +24,8 @@ export default class HttpServer {
   }
 
   public listening (): void {
-    const PORT = ((process?.env?.PORT) != null) ? process.env.PORT : 5000
     this.swagger()
-    this.express.listen(PORT, () => { this.logger.info(`Server running and listening at: 127.0.0.1:${PORT}`) })
+    this.express.listen(this.APP_PORT, () => { this.logger.info(`Server running and listening at: 127.0.0.1:${this.APP_PORT}`) })
   }
 
   private swagger (): void {
@@ -43,7 +44,7 @@ export default class HttpServer {
         },
         servers: [
           {
-            url: 'http://localhost:5000',
+            url: `http://localhost:${this.APP_PORT}`,
             description: 'local'
           }
         ],
@@ -51,10 +52,43 @@ export default class HttpServer {
         consumes: ['application/json'],
         produces: ['application/json'],
         tags: [
+          { name: 'login', description: 'login related end-points' },
           { name: 'cards', description: 'cards related end-points' }
         ],
         definitions: {},
         components: {
+          schemas: {
+            Error: {
+              type: 'object',
+              properties: {
+                statusCode: {
+                  type: 'integer',
+                  format: 'int32'
+                },
+                message: {
+                  type: 'string'
+                },
+                details: {
+                  type: 'string'
+                }
+              }
+            },
+            Card: {
+              type: 'object',
+              required: ['titulo', 'conteudo', 'lista'],
+              properties: {
+                titulo: {
+                  type: 'string'
+                },
+                conteudo: {
+                  type: 'string'
+                },
+                lista: {
+                  type: 'string'
+                }
+              }
+            }
+          },
           securitySchemes: {
             bearerAuth: {
               type: 'http',

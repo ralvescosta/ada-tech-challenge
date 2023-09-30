@@ -2,11 +2,15 @@ import { type Response } from 'express'
 import { UnauthorizedError } from '../../services/errors/unauthorized'
 import { NotFoundError } from '../../services/errors/not_found'
 import { ConflictError } from '../../services/errors/conflict'
+import { BadRequestError } from '../../services/errors/bad_request'
 
 export function errorHandler (error: Error, response: Response): void {
   if (error == null) return
 
   switch (error.constructor) {
+    case BadRequestError:
+      response.status(400).json({ statusCode: 400, message: error.message })
+      break
     case UnauthorizedError:
       response.status(401).json({ statusCode: 401, message: error.message })
       break
