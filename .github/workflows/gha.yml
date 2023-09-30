@@ -1,0 +1,52 @@
+name: pipeline
+
+on:
+  push:
+    branches: [main, develop]
+  pull_request:
+    branches: [main, develop]
+
+jobs:
+  ci:
+    runs-on: ubuntu-latest
+
+    steps:
+    - name: 📁 Checkout repository
+      uses: actions/checkout@v2
+      with:
+        submodules: 'true'
+        repo-token: ${{ secrets.GITHUB_TOKEN }}
+
+    - name: Use Node.js
+      uses: actions/setup-node@v3
+      with:
+        node-version: '16.16.0'
+        cache: 'yarn'
+
+    - name: 🔨 Install dependencies
+      run: cd backend && yarn --frozen-lockfile
+
+    - name: 🔎 Run tests
+      run: cd backend && yarn test:cov
+
+  build:
+    needs: [ci]
+    if: ${{ github.ref == 'refs/heads/develop' || github.ref == 'refs/heads/main' }}
+    runs-on: ubuntu-latest
+
+    steps:
+    - name: 📁 Checkout repository
+      uses: actions/checkout@v2
+      with:
+        submodules: 'true'
+        token: ${{ secrets.PAT_TOKEN }}
+        repo-token: ${{ secrets.GITHUB_TOKEN }}
+
+    - name: 🐳 Build container
+      env:
+        ECR_REGISTRY: ${{ steps.login-ecr.outputs.registry }}
+        ECR_REPOSITORY: legacy-api
+        IMAGE_TAG: ${{ needs.ci.outputs.tag }}
+      run: |
+        docker build . -t $ECR_REGISTRY/$ECR_REPOSITORY:$IMAGE_TAG
+        docker push $ECR_REGISTRY/$ECR_REPOSITORY:$IMAGE_TAG
