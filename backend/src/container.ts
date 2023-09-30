@@ -49,7 +49,7 @@ export default async (): Promise<Container> => {
 
   const cardsRepository = new CardsRepositoryImpl(logger)
   const cardsService = new CardsServiceImpl(logger, cardsRepository)
-  const cardsController = new CardsController(logger, cardsService)
+  const cardsController = new CardsController(cardsService)
   const cardsRoutes = new CardsRoutes(router, authMiddleware, bodyValidatorMiddleware, loggerMiddleware, cardsController)
 
   return {

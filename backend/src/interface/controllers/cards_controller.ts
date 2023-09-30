@@ -1,34 +1,63 @@
 import { type NextFunction, type Request, type Response } from 'express'
-import { type Logger } from '../../infra/logger'
 import { type CardsService } from '../../services/cards_service'
+import { errorHandler } from './error_handler'
 
 export class CardsController {
   constructor (
-    private readonly logger: Logger,
     private readonly cardsService: CardsService
   ) {}
 
-  public async listAllCards (req: Request, res: Response): Promise<void> {
-    this.logger.debug('listAllCards')
-    res.json()
+  public async get (req: Request, res: Response): Promise<void> {
+    try {
+      const cards = await this.cardsService.listAllCards()
+      res.status(200).json(cards)
+    } catch (err: any) {
+      errorHandler(err, res)
+    }
   }
 
-  public async createCard (req: Request, res: Response): Promise<void> {
-    this.logger.debug('createCard')
-    res.json()
+  public async post (req: Request, res: Response): Promise<void> {
+    const { title, content, list } = req.body
+
+    try {
+      const card = await this.cardsService.createCard({ title, content, list })
+      res.status(201).json(card)
+    } catch (err: any) {
+      errorHandler(err, res)
+    }
   }
 
-  public async updateCard (req: Request, res: Response, next: NextFunction): Promise<void> {
-    this.logger.debug('updateCard')
+  public async update (req: Request, res: Response, next: NextFunction): Promise<void> {
+    const { title, content, list } = req.body
+    const { id } = req.params
 
-    res.json({ hello: 'world' })
+    try {
+      const card = await this.cardsService.updateCard({ id: Number(id), title, content, list })
+
+      req.body = { ...req.body, id }
+
+      res.status(200).json(card)
+    } catch (err: any) {
+      errorHandler(err, res)
+      return
+    }
 
     next()
   }
 
-  public async deleteCard (req: Request, res: Response, next: NextFunction): Promise<void> {
-    this.logger.debug('deleteCard')
-    // res.json()
+  public async delete (req: Request, res: Response, next: NextFunction): Promise<void> {
+    const { id } = req.params
+
+    try {
+      const card = await this.cardsService.deleteCard(Number(id))
+
+      req.body = card
+
+      res.status(200).json()
+    } catch (err: any) {
+      errorHandler(err, res)
+      return
+    }
 
     next()
   }

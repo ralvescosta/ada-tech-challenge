@@ -1,7 +1,7 @@
 /* eslint-disable */
-import Environments from '../env.js'
+const Environments = require('../env.js')
 
-export default () => {
+module.exports = () => {
   Environments()
 
   const DB_HOST = ((process?.env?.DB_HOST) != null) ? process.env.DB_HOST : '127.0.0.1'

@@ -1,7 +1,8 @@
-import { Sequelize } from 'sequelize'
-import Configs from './configs.js'
+/* eslint-disable */
+const { Sequelize } = require('sequelize')
+const Configs = require('./configs.js')
 
-export default new Sequelize(
+module.exports = new Sequelize(
   {
     ...Configs(),
     define: {

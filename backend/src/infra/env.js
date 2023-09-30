@@ -1,7 +1,7 @@
 /* eslint-disable */
-import dotenv from 'dotenv'
+const dotenv = require('dotenv')
 
-export default () => {
+module.exports = () => {
   const nodeEnv = ((process?.env?.NODE_ENV) != null) ? process.env.NODE_ENV : 'local'
 
   const AVAILABLE_ENV = {

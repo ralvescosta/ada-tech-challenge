@@ -2,9 +2,19 @@ import { type Card } from '../../services/models/cards'
 import { type CardsRepository } from '../../services/interfaces/cards_repository'
 import { type Logger } from '../logger'
 import { CardsModel } from '../database/models/cards'
+import { InternalError } from '../../services/errors/internal'
 
 export class CardsRepositoryImpl implements CardsRepository {
   constructor (private readonly logger: Logger) {}
+
+  public async getByTitle (title: string): Promise<Card | null> {
+    try {
+      return await CardsModel.findOne({ where: { title } })
+    } catch (err) {
+      this.logger.error({ msg: 'failure to get card', error: err })
+      throw new Error('failure to get card')
+    }
+  }
 
   public async getById (id: number): Promise<Card | null> {
     try {
@@ -20,16 +30,16 @@ export class CardsRepositoryImpl implements CardsRepository {
       return await CardsModel.findAll()
     } catch (err) {
       this.logger.error({ msg: 'failure to list card', error: err })
-      throw new Error('failure to list card')
+      throw new InternalError('failure to list card')
     }
   }
 
-  public async create (card: Card): Promise<Card> {
+  public async create (card: Omit<Card, 'id'>): Promise<Card> {
     try {
       return await CardsModel.create(card)
     } catch (err) {
       this.logger.error({ msg: 'failure to crete the card', card, error: err })
-      throw new Error('failure to crete the card')
+      throw new InternalError('failure to crete the card')
     }
   }
 
@@ -42,10 +52,10 @@ export class CardsRepositoryImpl implements CardsRepository {
       }
 
       this.logger.error({ msg: 'failure to update the card', card })
-      throw new Error('failure to update card')
+      throw new InternalError('failure to update card')
     } catch (err) {
       this.logger.error({ msg: 'failure to update the card', card, error: err })
-      throw new Error('failure to update the card')
+      throw new InternalError('failure to update the card')
     }
   }
 
@@ -54,7 +64,7 @@ export class CardsRepositoryImpl implements CardsRepository {
       await CardsModel.destroy({ where: { id } })
     } catch (err) {
       this.logger.error({ msg: 'failure to delete the card', id, error: err })
-      throw new Error('failure to delete the card')
+      throw new InternalError('failure to delete the card')
     }
   }
 }

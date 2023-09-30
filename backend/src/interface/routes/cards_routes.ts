@@ -31,7 +31,7 @@ export class CardsRoutes {
     this.router.get(
       '/cards',
       this.authMiddleware.handler(),
-      this.cardsController.listAllCards.bind(this.cardsController)
+      this.cardsController.get.bind(this.cardsController)
     )
 
     /**
@@ -51,7 +51,7 @@ export class CardsRoutes {
     this.router.post('/cards',
       this.authMiddleware.handler(),
       this.bodyValidatorMiddleware.handler(cardSchema),
-      this.cardsController.createCard.bind(this.cardsController)
+      this.cardsController.post.bind(this.cardsController)
     )
 
     /**
@@ -77,7 +77,7 @@ export class CardsRoutes {
     this.router.put('/cards/:id',
       this.authMiddleware.handler(),
       this.bodyValidatorMiddleware.handler(cardSchema),
-      this.cardsController.updateCard.bind(this.cardsController),
+      this.cardsController.update.bind(this.cardsController),
       this.loggerMiddleware.handler('Alterado')
     )
 
@@ -97,7 +97,7 @@ export class CardsRoutes {
    */
     this.router.delete('/cards/:id',
       this.authMiddleware.handler(),
-      this.cardsController.deleteCard.bind(this.cardsController),
+      this.cardsController.delete.bind(this.cardsController),
       this.loggerMiddleware.handler('Removido')
     )
   }
