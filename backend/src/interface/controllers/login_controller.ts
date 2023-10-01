@@ -13,7 +13,7 @@ export class LoginController {
     const { login, senha } = request.body
 
     try {
-      const token = await this.loginService.perform({ login, password: senha })
+      const token = this.loginService.perform({ login, password: senha })
       response.status(200).json({ token })
     } catch (err: any) {
       errorHandler(err, response)

@@ -4,7 +4,7 @@ import { type SessionToken } from './interfaces/token'
 import { type Login } from './models/login'
 
 export interface LoginService {
-  perform: (credentials: Login) => Promise<string>
+  perform: (credentials: Login) => string
 }
 
 export class LoginServiceImpl implements LoginService {
@@ -15,11 +15,11 @@ export class LoginServiceImpl implements LoginService {
     private readonly logger: Logger,
     private readonly sessionToken: SessionToken
   ) {
-    if (process.env.DEFAULT_LOGIN == null) {
+    if (process.env.DEFAULT_LOGIN == null || process.env.DEFAULT_LOGIN === '') {
       throw Error('DEFAULT_LOGIN environment must be configured')
     }
 
-    if (process.env.DEFAULT_PASSWORD == null) {
+    if (process.env.DEFAULT_PASSWORD == null || process.env.DEFAULT_PASSWORD === '') {
       throw Error('DEFAULT_PASSWORD environment must be configured')
     }
 
@@ -27,7 +27,7 @@ export class LoginServiceImpl implements LoginService {
     this.DEFAULT_PASSWORD = process.env.DEFAULT_PASSWORD
   }
 
-  public async perform (credentials: Login): Promise<string> {
+  public perform (credentials: Login): string {
     if (credentials.login !== this.DEFAULT_LOGIN || credentials.password !== this.DEFAULT_PASSWORD) {
       this.logger.error('login or password is wrong')
       throw new UnauthorizedError('login or password is wrong')
