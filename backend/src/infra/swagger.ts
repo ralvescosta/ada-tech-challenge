@@ -69,5 +69,5 @@ export default (port: number): object => swaggerJsDoc({
       }
     }
   },
-  apis: ['**/*.ts']
+  apis: ['**/interface/routes/**.{ts,js}']
 })
