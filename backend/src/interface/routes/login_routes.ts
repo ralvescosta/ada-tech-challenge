@@ -1,6 +1,6 @@
 import { type Router } from 'express'
 import { type LoginController } from '../controllers/login_controller'
-import { type Schema } from '../middlewares/validator'
+import { type Schema } from '../middlewares/validator_middleware'
 import { type Middleware } from '../middlewares'
 import { loginPostSchema } from '../schemas/login'
 

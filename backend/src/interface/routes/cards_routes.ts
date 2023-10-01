@@ -1,7 +1,7 @@
 import { type Router } from 'express'
 import { type Middleware } from '../middlewares'
 import { type CardsController } from '../controllers/cards_controller'
-import { type Schema } from '../middlewares/validator'
+import { type Schema } from '../middlewares/validator_middleware'
 import { cardPostSchema, cardPutSchema } from '../schemas/cards'
 
 export class CardsRoutes {
