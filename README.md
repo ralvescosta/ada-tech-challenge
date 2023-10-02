@@ -50,6 +50,10 @@ Utilizou-se de vários padrões de projeto para a construção da aplicação, d
 
 Além dos requisitos apresentados na descrição do desafio também foi implementado uma estrategia de documentação seguindo a especificação do OpenAPI 3.0.0, a documentação pode ser acessada direto pela API no seguinte path: `http://<HOST>:5000/docs`, toda as requisições podem ser feitas direto pelo swagger.
 
+<p align="center">
+ <img src=".github/openapi.png" alt="openapi" width=950 hight=350/> 
+</p>
+
 ### Github Actions
 
 Criou-se uma estrategia simples de CI para o projeto utilizando **Github Actions** e [Sonarcloud](https://sonarcloud.io/summary/new_code?id=ralvescosta_ada-tech-challenge). Utilizou-se a Github Actions como o motor de execução da pipeline, configurado steps para validação dos tests unitários, integração com o Sonarcloud e build das images. Dessa forma, para cada vez que novos funcionalidades são enviados para o repositório é possível analisar a qualidade do código novo e se a aplicação continua consistente com todos os testes passando.
