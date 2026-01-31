@@ -47,7 +47,7 @@
     "@types/swagger-jsdoc": "^6.0.1",
     "@types/swagger-ui-express": "^4.1.4",
     "@typescript-eslint/eslint-plugin": "^6.4.0",
-    "eslint": "^8.0.1",
+    "eslint": "^9.26.0",
     "eslint-config-standard-with-typescript": "^39.1.0",
     "eslint-plugin-import": "^2.25.2",
     "eslint-plugin-n": "^15.0.0 || ^16.0.0 ",
